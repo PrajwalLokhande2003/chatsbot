@@ -25,7 +25,7 @@ const userName = JSON.parse(localStorage.getItem('user')).name
         formData.append('image',image)
         formData.append('userId',userId)
 
-        await axios.post('http://localhost:5000/creategroup',formData,{
+        await axios.post('https://chatsbot-rwv2.onrender.com/creategroup',formData,{
             headers:{
                 'Content-Type':'multipart/form-data'
             }
@@ -41,7 +41,7 @@ const userName = JSON.parse(localStorage.getItem('user')).name
   formData.append('email',email)
   formData.append('userName',userName)
 
-  await axios.post(`http://localhost:5000/accept-invite`,formData,{
+  await axios.post(`https://chatsbot-rwv2.onrender.com/accept-invite`,formData,{
     headers:{
       "Content-Type":"application/json"
     }
