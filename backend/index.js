@@ -5,7 +5,7 @@ require('./DB/config')
 const PORT = process.env.PORT || 5000
 const io = require('socket.io')(PORT,{
     cors: {
-        origin: ['https://saychats.netlify.app']
+        origin: 'https://dancing-daffodil-bf0194.netlify.app/'
 })
 
 const { getDownloadURL, ref, getStorage, uploadBytes } = require('firebase/storage')
