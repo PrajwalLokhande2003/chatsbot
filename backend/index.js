@@ -7,6 +7,7 @@ const io = require('socket.io')(5050, {
         origin: ['https://saychats.netlify.app']
     }
 })
+io.set(“transports”, [“polling”])
 
 const { getDownloadURL, ref, getStorage, uploadBytes } = require('firebase/storage')
 const config = require('./DB/firebaseconfig')
