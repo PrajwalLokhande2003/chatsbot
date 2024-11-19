@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors')
 require('./DB/config')
-const io = require('socket.io')(5050, {
+const io = require('socket.io')({
     cors: {
         origin: ['https://saychats.netlify.app'],
         methods: ["GET","POST"]
