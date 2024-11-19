@@ -8,7 +8,6 @@ const io = require('socket.io')(5050, {
         methods: ["GET","POST"]
     }
 })
-io.set(“transports”, [“polling”])
 
 const { getDownloadURL, ref, getStorage, uploadBytes } = require('firebase/storage')
 const config = require('./DB/firebaseconfig')
