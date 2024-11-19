@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 5000
 const io = require('socket.io')(server,{
     cors: {
         origin: '*'
+    }
 })
 
 const { getDownloadURL, ref, getStorage, uploadBytes } = require('firebase/storage')
