@@ -28,7 +28,7 @@ const Home = () => {
     const inviteRef = useRef(null)
     const okRef = useRef(null)
     
-    const socket = io('http://localhost:5050')
+    const socket = io('https://chatsbot-rwv2.onrender.com')
     
     
     useEffect(()=>{  
@@ -90,7 +90,7 @@ const Home = () => {
 
     
     const getGroupId = async()=>{
-        await axios.get(`http://localhost:5000/get-groupid-for-invite/${groupId}`).then((res)=>{
+        await axios.get(`https://chatsbot-rwv2.onrender.com/get-groupid-for-invite/${groupId}`).then((res)=>{
             if(res){
                 socket.emit('addUserId',res.data)
                 
@@ -145,7 +145,7 @@ const Home = () => {
   }, [groups]);
 
     const getGroups = async (e) => {
-        await axios.get(`http://localhost:5000/group&useriddata/${userId}`,).then((res) => {
+        await axios.get(`https://chatsbot-rwv2.onrender.com/group&useriddata/${userId}`,).then((res) => {
             setGroups(res.data)
             
         })
@@ -169,7 +169,7 @@ const Home = () => {
         formData.append('userName', userName)
         formData.append('date', date)
 
-        await axios.post(`http://localhost:5000/send-chat`, formData, {
+        await axios.post(`https://chatsbot-rwv2.onrender.com/send-chat`, formData, {
             headers: {
                 "Content-Type": "application/json"
             }
@@ -191,7 +191,7 @@ const Home = () => {
     }
 
     const getChatData = async () => {
-        await axios.get(`http://localhost:5000/chat-data/${groupId}`).then(async (res) => {
+        await axios.get(`https://chatsbot-rwv2.onrender.com/chat-data/${groupId}`).then(async (res) => {
             if (res) {
                 setChatId(res.data)
             }
@@ -212,7 +212,7 @@ const Home = () => {
         formData.append('userName', userName)
         formData.append('image', image)
 
-        await axios.post('http://localhost:5000/send-invite', formData, {
+        await axios.post('https://chatsbot-rwv2.onrender.com/send-invite', formData, {
             headers: {
                 "Content-Type": "application/json"
             }
@@ -236,7 +236,7 @@ const Home = () => {
 
 
     const getMember = async() =>{
-        await axios.get(`http://localhost:5000/get-group-member/${groupId}`).then((res)=>{
+        await axios.get(`https://chatsbot-rwv2.onrender.com/get-group-member/${groupId}`).then((res)=>{
             if(res){
                 setMember(res.data)
                 
@@ -269,7 +269,7 @@ const Home = () => {
 
 
 const exitGroup = async() =>{
-    await axios.delete(`http://localhost:5000/exit-from-group/${exitId}`)
+    await axios.delete(`https://chatsbot-rwv2.onrender.com/exit-from-group/${exitId}`)
   }
   
 
