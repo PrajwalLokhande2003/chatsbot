@@ -4,7 +4,8 @@ const cors = require('cors')
 require('./DB/config')
 const io = require('socket.io')(5050, {
     cors: {
-        origin: ['https://saychats.netlify.app']
+        origin: ['https://saychats.netlify.app'],
+        methods: ["GET","POST"]
     }
 })
 io.set(“transports”, [“polling”])
