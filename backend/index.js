@@ -2,11 +2,10 @@ const express = require('express');
 const app = express();
 const cors = require('cors')
 require('./DB/config')
-const io = require('socket.io')({
+const PORT = process.env.PORT || 5000
+const io = require('socket.io')(PORT,{
     cors: {
-        origin: ['https://saychats.netlify.app'],
-        methods: ["GET","POST"]
-    }
+        origin: ['https://saychats.netlify.app']
 })
 
 const { getDownloadURL, ref, getStorage, uploadBytes } = require('firebase/storage')
@@ -16,7 +15,7 @@ const multer = require('multer')
 // const path = require('path')
 // const Jwt = require('jsonwebtoken')
 // const jwtKey = process.env.JWT_TOKEN
-const PORT = process.env.PORT || 5000
+
 const User = require('./DB/users');
 const Group = require('./DB/group');
 const GroupDetail = require('./DB/groupsdetails');
