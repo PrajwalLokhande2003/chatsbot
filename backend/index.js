@@ -9,8 +9,6 @@ const io = require('socket.io')({
     }
 })
 
-io.connect('websocket','polling')
-
 const { getDownloadURL, ref, getStorage, uploadBytes } = require('firebase/storage')
 const config = require('./DB/firebaseconfig')
 const { initializeApp } = require('firebase/app')
