@@ -25,7 +25,7 @@ const Nav = () =>{
 
   const accepiRef = useRef(null)
 
-  const socket = io.connect('http://localhost:5050')
+  const socket = io.connect('https://chatsbot-rwv2.onrender.com')
 
   useEffect(()=>{
     if(auth){
@@ -67,7 +67,7 @@ const Nav = () =>{
 
   const getMessage = async() =>{
     if(auth){
-      await axios.get(`http://localhost:5000/new-message/${JSON.parse(localStorage.getItem('user')).email}`).then((res)=>{
+      await axios.get(`https://chatsbot-rwv2.onrender.com/new-message/${JSON.parse(localStorage.getItem('user')).email}`).then((res)=>{
         if(res){
             setNewMessage(res.data)
         }
@@ -85,7 +85,7 @@ const inviteHandle = async()=>{
   formData.append('email',JSON.parse(auth).email)
   formData.append('userName',JSON.parse(auth).name)
 
-  await axios.post(`http://localhost:5000/accept-invite`,formData,{
+  await axios.post(`https://chatsbot-rwv2.onrender.com/accept-invite`,formData,{
     headers:{
       "Content-Type":"application/json"
     }
@@ -98,7 +98,7 @@ const inviteHandle = async()=>{
 }
 
 const deleteMessage = async() =>{
-  await axios.delete(`http://localhost:5000/delete-invite-data/${messageId}`).then((res)=>{
+  await axios.delete(`https://chatsbot-rwv2.onrender.com/delete-invite-data/${messageId}`).then((res)=>{
     if(res){
       Navigate('/')
     }
