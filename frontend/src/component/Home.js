@@ -62,6 +62,7 @@ const Home = () => {
         if(groups === ''){
             getGroups()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [groups])
 
     useEffect(() => {
