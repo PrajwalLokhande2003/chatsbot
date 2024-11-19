@@ -57,7 +57,7 @@ const userName = JSON.parse(localStorage.getItem('user')).name
         <>
         <div className='createGroupMain' style={{margin : window.innerWidth>550?'10rem 50rem':'25% 2rem'}}>
             <div className='uDiv'>
-            <input type='file' className='upload'  style={{background:`url(${groupImage})`+'0% 0% / cover'}}   onChange={(e)=>{setImage(e.target.files[0]);setGroupImage(URL.createObjectURL(e.target.files[0]))}} />
+            <input type='file' className='upload'  style={{background:`url(${groupImage}) 0% 0% / cover`}}   onChange={(e)=>{setImage(e.target.files[0]);setGroupImage(URL.createObjectURL(e.target.files[0]))}} />
             </div>
             <input type='text' className='groupName' placeholder='enter group name' value={groupName} onChange={(e)=>{setGroupName(e.target.value)}}/>
             <button className='createBtn' onClick={createGroup} style={{marginLeft:window.innerWidth>550?'30%':'35%'}}>Create Group</button>
