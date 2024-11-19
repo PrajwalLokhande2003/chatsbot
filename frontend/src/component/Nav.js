@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import {io} from 'socket.io-client'
-import {animate, motion} from 'framer-motion'
+import {motion} from 'framer-motion'
 
 const Nav = () =>{
 
