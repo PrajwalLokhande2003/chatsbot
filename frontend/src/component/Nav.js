@@ -158,6 +158,7 @@ window.addEventListener('scroll',getPosition)
       </div>
     </div>
     <div>
+    {window.innerWidth<550?
     <motion.div animate={{x:left?0:window.innerWidth}} transition={{type:"tween"}} initial={{x:window.innerWidth}} className="res-nav-bar">
                   <ul>
                   <li className="groups-bar" onClick={()=>{setLeft(!left);setActive("line3");document.body.style.overflow='visible'}}> <Link to={'/'}>Groups</Link></li>
@@ -177,7 +178,7 @@ window.addEventListener('scroll',getPosition)
                 </div>
             </li>
                   </ul>
-                </motion.div>
+                </motion.div>:''}
                 </div>
                 
 
