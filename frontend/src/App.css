@@ -1,0 +1,796 @@
+html{
+  font-size: 62.5%;
+}
+body{
+  background: #000000;
+  color: #fff;
+  overflow-y: scroll;
+}
+
+body::-webkit-scrollbar{
+  display: none;
+}
+.App .header{
+  width: -webkit-fill-available;
+  height: 10rem;
+  background-color: rgb(162, 0, 255);
+  color: #ffffff;
+  transition: all 10s linear;
+}
+
+.App .header .appName{
+  font-size: 5rem;
+  font-family: fantasy;
+  padding: 1rem 2rem;
+}
+
+.App .header .navbar{
+  margin: -8rem 100rem;
+}
+
+.navbar .groups-bar{
+  margin: 0 0 0 -60rem;
+}
+
+
+.groupsDiv{
+  overflow: hidden;
+}
+.createGroup{
+  min-width: 20rem;
+}
+
+.groups{
+  margin: 2rem 1rem;
+  max-width: 60rem;
+  background: #292a2a;
+  border-radius: 2rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.groups::-webkit-scrollbar{
+  display: none;
+}
+
+.groupsDiv .group-chat{
+  width: 80rem;
+  position: absolute;
+  background: #292929;
+  height: 78rem;
+  right: 1rem;
+  border-radius: 2rem;
+}
+
+.groups .yourGroups{
+  margin: 2rem 2rem;
+  overflow: hidden;
+  display: grid;
+  padding: 2rem;
+}
+
+.yourGroups ul{
+  list-style: none;
+  display: inline-flex;
+  gap: 3rem;
+}
+
+.yourGroups ul:hover{
+  background-color: rgb(70, 69, 69);
+  border-radius: 2rem;
+}
+
+.yourGroups ul li img{
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  border: .3rem solid #7c2cfa;
+}
+
+.yourGroups ul li span{
+  font-size: 3rem;
+  font-family: monospace;
+}
+
+.group-chat .chatDiv ul{
+  background: #000000;
+  padding: 1rem;
+  border-radius: 4rem;
+  overflow: hidden;
+}
+
+.group-chat .chatDiv{
+  margin-top: -1rem;
+}
+
+.chatDiv .ifChat{
+  text-align: center;
+  margin: 35rem 0;
+}
+
+.chatDiv .sendIcon{
+  /* position: absolute;
+  bottom: 2rem; */
+  color: #878392;
+  height: 3rem;
+  width: 3rem;
+  right: 3rem;
+  rotate: 45deg;
+  cursor: pointer;
+  float: inline-end;
+    margin: -5rem 2rem;
+}
+
+.chatDiv textarea{
+  width: -webkit-fill-available;
+  width: -moz-available;
+  padding: 1rem 5rem;
+  border-radius: 5rem;
+  font-size: 2rem;
+  outline: none;
+  resize: none;
+}
+
+.chatDiv ul{
+  display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.chatDiv ul li img{
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  border: .3rem solid #8f56ff;
+}
+
+.chatDiv .inviteDiv{
+  display: inline-grid;
+  position: absolute;
+  background: #5c606047;
+  padding: 5rem 3rem;
+  border-radius: 2rem;
+  gap: 5rem;
+  visibility: hidden;
+}
+
+.chatDiv .memberDiv{
+  display: inline-grid;
+  position: absolute;
+  background: #5c606047;
+  border-radius: 2rem;
+  gap: 5rem;
+  visibility: hidden;
+}
+
+.chatDiv .memberDiv .memberList{
+  width: -webkit-fill-available;
+  width: -moz-available;
+    position: absolute;
+    top: 5rem;
+    left: 5rem;
+    right: 5rem;
+  font-size: 2rem;
+  gap: 1rem;
+  display: grid;
+
+}
+
+.chatDiv .inviteDiv .inviteEmail{
+  width: 35rem;
+  padding: 1rem;
+  border-radius: 2rem;
+  background: #00000082;
+  border: none;
+  color: #ffffff;
+  font-size: 2rem;
+  outline: none;
+  text-align: center;
+}
+
+.chatDiv .inviteDiv .btnDiv{
+  display: flex;
+    gap: 5rem;
+    position: relative;
+    left: 10rem;
+    font-size: 2rem;
+}
+
+.chatDiv .inviteDiv .btnDiv .inviteBtn{
+  font-size: 2rem;
+    padding: 1rem;
+    border: none;
+    border-radius: 1rem;
+    background: #7c2cfa;
+    color: #fff;
+    cursor: pointer;
+}
+
+.chatDiv .inviteDiv .btnDiv .cancelBtn{
+  font-size: 2rem;
+    padding: 1rem;
+    border: none;
+    border-radius: 1rem;
+    background: #fa2c2c;
+    color: #fff;
+    cursor: pointer;
+}
+
+.chatSection .messageDiv{
+  overflow: scroll;
+  overflow-x: hidden;
+  display: grid;
+}
+
+.chatSection .messageDiv .chatDate{
+  margin: 2rem 0;
+  justify-self: center;
+  font-size: 2rem;
+  background: #00000087;
+  text-align: center;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.messageDiv::-webkit-scrollbar{
+  display: none;
+}
+
+.chatSection .messageDiv .messages{
+  width: fit-content;
+    padding: 1rem 2rem;
+    background: #7c2cfa;
+    max-width: 40rem;
+    margin: 1rem 1rem 0 1rem;
+    border-radius: 3rem;
+    border-top-right-radius: 0rem;
+    word-break: break-all;
+    justify-self: right;
+    white-space: break-spaces;
+    display: grid;
+    min-width: 5rem;
+}
+
+.chatSection .messageDiv .otherMessage{
+  width: fit-content;
+    padding: 1rem 2rem;
+    background: #5a595a;
+    max-width: 40rem;
+    border-radius: 3rem;
+    border-top-left-radius: 0rem;
+    margin: 1rem 1rem 0 1rem;
+    justify-self: left;
+    float: inline-start;
+    word-break: break-all;
+    white-space: break-spaces;
+    display: grid;
+    min-width: 5rem;
+}
+
+.chatSection .messageDiv .msgTime{
+  font-size: 0.7rem;
+  justify-self: self-end;
+}
+
+.chatSection .messageDiv .userName{
+  color: #04ff04;
+  position: relative;
+  float: inline-start;
+}
+
+.chatSection .messageDiv .msg{
+    float: inline-start;
+    padding: 0.5rem 0;
+    font-size: 1.5rem;
+}
+ .newMessageDiv{
+  width: -webkit-fill-available;
+  width: -moz-available;
+  background: #0000006e;
+  padding: 2rem;
+  position: absolute;
+  border: none;
+  border-radius: 2rem;
+  overflow: scroll;
+  z-index: 1;
+  right: 4rem;
+}
+
+.newMessageDiv::-webkit-scrollbar{
+  display: none;
+}
+
+.messDiv .message{
+  
+  height: auto;
+  font-size: 2rem;
+  position: relative;
+  top: 3rem;
+  text-align: center;
+  background: #83828275;
+  width: -webkit-fill-available;
+  width: -moz-available;
+  padding: 1rem;
+  border-radius: 2rem;
+  margin-top: 2rem;
+}
+
+.messDiv .btnDiv{
+  margin: 3rem 15rem;
+    display: flex;
+    gap: 10rem;
+}
+
+.messDiv .message .timeDiv{
+  padding: 0.5rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.messDiv .btnDiv .acceptBtn{
+  width: 20rem;
+  font-size: 1.5rem;
+  background: green;
+  color: #fff;
+  padding: 1rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.messDiv .btnDiv .cancelBtn{
+  width: 20rem;
+  font-size: 1.5rem;
+  background: #fa2c2c;
+  color: #fff;
+  padding: 1rem;
+  border: none; 
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.chatDiv .exitConform{
+  font-size: 2rem;
+  display: inline-grid;
+  position: absolute;
+  background: #5c606047;
+  padding: 5rem 3rem;
+  border-radius: 2rem;
+  gap: 5rem;
+  visibility: hidden;
+}
+.chatDiv .exitConform .btnDiv{
+  margin-left: 3rem;
+    display: flex;
+    gap: 5rem;
+}
+
+.chatDiv .exitConform .btnDiv .okBtn{
+  width: 10rem;
+  font-size: 1.5rem;
+  background: #fa2c2c;
+  color: #fff;
+  padding: 1rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.chatDiv .exitConform .btnDiv .cancelBtn{
+  width: 10rem;
+  font-size: 1.5rem;
+  background: green;
+  color: #fff;
+  padding: 1rem;
+  border: none; 
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+
+.messageDiv div{
+  float: inline-end;
+}
+
+.chatDiv ul li span{
+  font-size: 2rem;
+  position: absolute;
+  margin-top: 1rem;
+  max-width: 20rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chatDiv .onlineMember{
+  display: flex;
+    width: 45rem;
+    overflow: scroll;
+    max-height: 4rem;
+}
+
+.chatDiv .onlineMember::-webkit-scrollbar{
+  display: none;
+}
+
+
+.chatDiv .onlineMember .onlineCircle{
+  position: relative;
+  top: 1rem;
+  margin: -.5rem 0rem 0 -1rem;
+  width: .5rem;
+  height: .5rem;
+  background: greenyellow;
+  border-radius: 50%;
+}
+
+.chatDiv .groupMenu{
+  position: absolute;
+    background: #0000008a;
+    padding: 2rem;
+    width: 15rem;
+    margin: 0 0 0 -1rem;
+    border-radius: 2rem;
+    text-align-last: center;
+    visibility: hidden;
+    transition: all .2s;
+    z-index: 1;
+    font-size: 2rem;
+    display: grid;
+    gap: 2rem;
+}
+
+.App .header .navbar ul{
+  list-style: none;
+  display: flex;
+  gap: 10rem;
+  font-size: 3rem;
+  font-family: sans-serif;
+}
+
+.App .header .navbar .bar .profile{
+  position: absolute;
+    margin: 0px 10rem;
+}
+
+.App .header .navbar a{
+  text-decoration: none;
+  color: #fff;
+}
+
+.profile  .option{
+  background: #fff;
+  padding: 2rem;
+  width: 15rem;
+  margin: 0 0 0 -5rem;
+  border-radius: 2rem;
+  height: 15rem;
+  text-align-last: center;
+  visibility: hidden;
+  transition: all .2s;
+  position: relative;
+  z-index: 1;
+  color: #000;
+}
+
+.profileDiv .bell{
+  position: absolute;
+  top: 3rem;
+  margin: 0 10rem;
+}
+
+.profileDiv .bell .bellIcon{
+  color: #04ff04;
+  visibility: hidden;
+}
+
+.option .logout{
+  position: relative;
+  top: 1rem;
+  padding: 1rem;
+  font-size: 2rem;
+  font-family: sans-serif;
+  border: none;
+  border-radius: 1rem;
+  background: red;
+  color: #fff;
+}
+
+.signupMain{
+  position: absolute;
+  background: #fff;
+  padding: 10rem;
+  border-radius: 2rem;
+}
+
+.signupMain .signupForm{
+  display: grid;
+  row-gap: 5rem;
+}
+
+.signupMain .signupForm .name{
+  border: none;
+    border-bottom: .1rem solid rgb(162, 0, 255);
+    text-align: center;
+    outline: none;
+    font-size: 2rem;
+    width: 40rem;
+}
+
+.signupMain .signupForm .email{
+  border: none;
+    border-bottom: .1rem solid rgb(162, 0, 255);
+    text-align: center;
+    outline: none;
+    font-size: 2rem;
+    width: 40rem;
+}
+
+.signupMain .signupForm .check{
+  color: #fa2c2c;
+    position: absolute;
+    top: 20rem;
+    left: 25rem;
+    visibility: hidden;
+    text-align: center;
+}
+
+.signupMain .signupForm .password{
+  border: none;
+    border-bottom: .1rem solid rgb(162, 0, 255);
+    text-align: center;
+    outline: none;
+    font-size: 2rem;
+    width: 40rem;
+}
+
+.signupMain .signupForm .submitBtn{
+  font-size: 2rem;
+  height: 5rem;
+  width: 10rem;
+  padding: 1rem;
+  font-family: sans-serif;
+  background-color: rgb(162, 0, 255);
+  color: #ffffff;
+  border: none;
+  border-radius: 1rem;
+  margin-left: 15rem;
+  cursor: pointer;
+
+}
+
+.loginMain{
+  position: absolute;
+  background: #fff;
+  padding: 10rem;
+  border-radius: 2rem;
+}
+
+.loginMain .loginForm{
+  display: grid;
+  row-gap: 5rem;
+}
+
+.loginMain .loginForm .email{
+  border: none;
+    border-bottom: .1rem solid rgb(162, 0, 255);
+    text-align: center;
+    outline: none;
+    font-size: 2rem;
+    width: 40rem;
+}
+
+.loginMain .loginForm .password{
+  border: none;
+    border-bottom: .1rem solid rgb(162, 0, 255);
+    text-align: center;
+    outline: none;
+    font-size: 2rem;
+    width: 40rem;
+}
+
+.loginMain .loginForm .submitBtn{
+  font-size: 2rem;
+  height: 5rem;
+  width: 10rem;
+  padding: 1rem;
+  font-family: sans-serif;
+  background-color: rgb(162, 0, 255);
+  color: #ffffff;
+  border: none;
+  border-radius: 1rem;
+  margin-left: 15rem;
+  cursor: pointer;
+
+}
+
+.createGroupMain{
+  display: grid;
+  row-gap: 5rem;
+  background: #fff;
+  padding: 10rem 5rem;
+  border-radius: 5rem;
+  text-align-last: center;
+}
+
+.createGroupMain .uDiv .upload{
+  height: 10rem;
+  width: 10rem;
+  font-size: 1rem;
+  border-radius: 50%;
+  align-content: center;
+  content-visibility: hidden;
+  margin: 0rem 12rem;
+  cursor: pointer;
+  border: .5rem solid #000;
+}
+
+.createGroupMain .groupName{
+  border: none;
+    border-bottom: .1rem solid rgb(162, 0, 255);
+    text-align: center;
+    outline: none;
+    font-size: 2rem;
+}
+
+.createGroupMain .createBtn{
+  font-size: 2rem;
+  height: 5rem;
+  width: 15rem;
+  padding: 1rem;
+  font-family: sans-serif;
+  background-color: rgb(162, 0, 255);
+  color: #ffffff;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+
+}
+
+.line3.active .top-line{
+  transform: translateY(2px) rotate(-45deg);
+  y: 5;
+}
+
+.line3.active .mid-line{
+  opacity: 0;
+}
+
+.line3.active .bottom-line{
+  transform: translateY(0) rotate(-135deg);
+  y:5;
+}
+
+.line3>rect{
+  -webkit-transition: all 0.3s ease-in-out, opacity 0.2s linear 0.1s;
+    transition: all 0.3s ease-in-out, opacity 0.2s linear 0.1s;
+    transform-origin: 50% 50%;
+}
+
+.res-nav-bar{
+  width: -webkit-fill-available;
+  height: -webkit-fill-available;
+  position: absolute;
+  z-index: 1;
+  background: #ffffff;
+  color: rgb(61, 79, 88);
+  font-size: 3rem;
+  font-weight: 600;
+}
+
+.res-nav-bar ul{
+  list-style: none;
+  display: grid;
+  gap: 5rem;
+}
+.res-nav-bar ul li a{
+  color: rgb(61, 79, 88);
+  text-decoration: none;
+}
+
+
+@media screen and (max-width: 320px) {
+  html{
+    font-size: 30%;
+  }
+  .chatSection .messageDiv .otherMessage {
+    max-width: -webkit-fill-available;
+}
+.chatSection .messageDiv .messages {
+  max-width: -webkit-fill-available;
+}
+.groupsDiv .group-chat{
+  margin-left: 1rem;
+  width: -webkit-fill-available;
+}
+.groups{
+  max-width: -webkit-fill-available;
+}
+}
+
+@media screen and (max-width: 375px) and (min-width: 321px) {
+  html{
+    font-size: 35%;
+  }
+
+  .chatSection .messageDiv .otherMessage {
+    max-width: -webkit-fill-available;
+}
+.chatSection .messageDiv .messages {
+  max-width: -webkit-fill-available;
+}
+.groupsDiv .group-chat{
+  margin-left: 1rem;
+  width: -webkit-fill-available;
+}
+.groups{
+  max-width: -webkit-fill-available;
+}
+
+}
+
+
+@media screen and (max-width: 425px) and (min-width: 376px) {
+  html{
+    font-size: 40%;
+  }
+
+  .chatSection .messageDiv .otherMessage {
+    max-width: -webkit-fill-available;
+}
+.chatSection .messageDiv .messages {
+  max-width: -webkit-fill-available;
+}
+.groupsDiv .group-chat{
+  margin-left: 1rem;
+  width: -webkit-fill-available;
+}
+.groups{
+  max-width: -webkit-fill-available;
+}
+
+}
+
+@media screen and (max-width : 550px) and (min-width:426px) {
+  html{
+    font-size: 32%;
+  }
+  .chatSection .messageDiv .otherMessage {
+    max-width: 60rem;
+}
+.chatSection .messageDiv .messages {
+  max-width: 60rem;
+}
+.groupsDiv .group-chat{
+  margin-left: 1rem;
+  width: -webkit-fill-available;
+}
+.groups{
+  max-width: -webkit-fill-available;
+}
+
+}
+
+@media screen and (max-width : 768px) and (min-width:551px) {
+  html{
+    font-size: 32%;
+  }
+}
+
+@media screen and (max-width : 1024px) and (min-width:769px) {
+
+  html{
+    font-size: 45%;
+  }
+
+}
+
+
+@media screen and (max-width : 2560px) and (min-width:1441px) {
+
+  html{
+    font-size: 110%;
+  }
+
+
+}
