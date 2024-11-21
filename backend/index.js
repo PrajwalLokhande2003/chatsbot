@@ -86,7 +86,7 @@ app.get('/group&useriddata/:id', async (req, res) => {
 app.get('/search/:key', async(req,res)=>{
     let result = await GroupDetail.find({
         "$or":[
-            {name:{$regex:req.params.key}}
+            {groupName:{$regex:req.params.key}}
         ]
     })
     res.send(result)
