@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect , useRef, useState } from "react";
 import { useNavigate} from 'react-router-dom'
 import axios from 'axios'
 import {io} from 'socket.io-client'
 
 const SignUp = () =>{
-    const socket = io.connect('http://localhost:5080')
+    const socket = io.connect('https://chatsbot-rwv2.onrender.com')
     
     const navigate = useNavigate()
     useEffect(()=>{

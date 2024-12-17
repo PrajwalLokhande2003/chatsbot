@@ -31,8 +31,11 @@ const Home = () => {
     const okRef = useRef(null)
     
     const socket = io('https://chatsbot-rwv2.onrender.com')
+<<<<<<< HEAD
 
     
+=======
+>>>>>>> 854df859630d9d7527dbeb67b0148a9fac7844b0
     
     
     useEffect(()=>{  
@@ -66,6 +69,7 @@ const Home = () => {
         if(groups.length===0){
             getGroups()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [groups])
 
     useEffect(() => {
@@ -149,9 +153,13 @@ const Home = () => {
 
     const getGroups = async (e) => {
         await axios.get(`https://chatsbot-rwv2.onrender.com/group&useriddata/${userId}`,).then((res) => {
+<<<<<<< HEAD
             if(res){
                 setGroups(res.data)
             }
+=======
+            setGroups(res.data)
+>>>>>>> 854df859630d9d7527dbeb67b0148a9fac7844b0
             
         })
             .catch((err) => {
