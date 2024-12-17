@@ -5,6 +5,7 @@ body{
   background: #000000;
   color: #fff;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 body::-webkit-scrollbar{
@@ -16,6 +17,7 @@ body::-webkit-scrollbar{
   background-color: rgb(162, 0, 255);
   color: #ffffff;
   transition: all 10s linear;
+  z-index: 1;
 }
 
 .App .header .appName{
@@ -67,6 +69,17 @@ body::-webkit-scrollbar{
   overflow: hidden;
   display: grid;
   padding: 2rem;
+}
+
+.groups .yourGroups .searchBar{
+  background: transparent;
+  color: #8f56ff;
+  outline: none;
+  border: beige solid;
+  text-align: center;
+  padding: 2rem;
+  border-radius: 5rem;
+  font-size: 3rem;
 }
 
 .yourGroups ul{
@@ -670,12 +683,14 @@ body::-webkit-scrollbar{
 .res-nav-bar{
   width: -webkit-fill-available;
   height: -webkit-fill-available;
-  position: absolute;
+  position: fixed;
+  top: 10rem;
   z-index: 1;
   background: #ffffff;
   color: rgb(61, 79, 88);
   font-size: 3rem;
   font-weight: 600;
+
 }
 
 .res-nav-bar ul{

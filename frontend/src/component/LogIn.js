@@ -29,7 +29,7 @@ const LogIn = () =>{
     const logIn = async(e) =>{
         e.preventDefault()
         
-        await axios.post('http://localhost:5000/login',formData,{
+        await axios.post('https://chatsbot-rwv2.onrender.com/login',formData,{
             headers:{
                 'Content-Type':'application/json'
             }

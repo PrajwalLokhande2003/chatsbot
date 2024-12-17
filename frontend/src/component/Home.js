@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {  useEffect,  useRef, useState } from "react";
 import axios from 'axios'
 import {io} from 'socket.io-client'
@@ -8,7 +9,7 @@ const Home = () => {
 
 
     // const [groupsId,setGroupsId] = useState('')
-    const [groups, setGroups] = useState('')
+    const [groups, setGroups] = useState([])
     const user = JSON.parse(localStorage.getItem('user'))
     const userId = JSON.parse(localStorage.getItem('user'))._id
     const userName = JSON.parse(localStorage.getItem('user')).name
@@ -24,11 +25,14 @@ const Home = () => {
     const [member,setMember] = useState('')
     const [exitId,setExitId] = useState('')
     const [exitVisibility,setExitVisibility] = useState('')
+    const [group,setGroup] = useState([])
 
     const inviteRef = useRef(null)
     const okRef = useRef(null)
     
-    const socket = io('http://localhost:5050')
+    const socket = io('https://chatsbot-rwv2.onrender.com')
+
+    
     
     
     useEffect(()=>{  
@@ -59,7 +63,7 @@ const Home = () => {
     const image = `${item.image}`
 
     useEffect(() => {
-        if(groups === ''){
+        if(groups.length===0){
             getGroups()
         }
     }, [groups])
@@ -90,10 +94,9 @@ const Home = () => {
 
     
     const getGroupId = async()=>{
-        await axios.get(`http://localhost:5000/get-groupid-for-invite/${groupId}`).then((res)=>{
+        await axios.get(`https://chatsbot-rwv2.onrender.com/get-groupid-for-invite/${groupId}`).then((res)=>{
             if(res){
                 socket.emit('addUserId',res.data)
-                
                 
             }
         })
@@ -145,8 +148,10 @@ const Home = () => {
   }, [groups]);
 
     const getGroups = async (e) => {
-        await axios.get(`http://localhost:5000/group&useriddata/${userId}`,).then((res) => {
-            setGroups(res.data)
+        await axios.get(`https://chatsbot-rwv2.onrender.com/group&useriddata/${userId}`,).then((res) => {
+            if(res){
+                setGroups(res.data)
+            }
             
         })
             .catch((err) => {
@@ -156,6 +161,21 @@ const Home = () => {
 
 
     }
+
+    const searchHandel = async(e) =>{
+        let key = e.target.value
+        if(key){
+            await axios.get(`https://chatsbot-rwv2.onrender.com/search/${key}`).then((res)=>{
+                 
+                if(res.data){
+                    setGroups(res.data)
+                }
+            })
+
+    }else{
+        getGroups()   
+    }
+}
 
     
 
@@ -169,7 +189,7 @@ const Home = () => {
         formData.append('userName', userName)
         formData.append('date', date)
 
-        await axios.post(`http://localhost:5000/send-chat`, formData, {
+        await axios.post(`https://chatsbot-rwv2.onrender.com/send-chat`, formData, {
             headers: {
                 "Content-Type": "application/json"
             }
@@ -191,7 +211,7 @@ const Home = () => {
     }
 
     const getChatData = async () => {
-        await axios.get(`http://localhost:5000/chat-data/${groupId}`).then(async (res) => {
+        await axios.get(`https://chatsbot-rwv2.onrender.com/chat-data/${groupId}`).then(async (res) => {
             if (res) {
                 setChatId(res.data)
             }
@@ -212,7 +232,7 @@ const Home = () => {
         formData.append('userName', userName)
         formData.append('image', image)
 
-        await axios.post('http://localhost:5000/send-invite', formData, {
+        await axios.post('https://chatsbot-rwv2.onrender.com/send-invite', formData, {
             headers: {
                 "Content-Type": "application/json"
             }
@@ -236,7 +256,7 @@ const Home = () => {
 
 
     const getMember = async() =>{
-        await axios.get(`http://localhost:5000/get-group-member/${groupId}`).then((res)=>{
+        await axios.get(`https://chatsbot-rwv2.onrender.com/get-group-member/${groupId}`).then((res)=>{
             if(res){
                 setMember(res.data)
                 
@@ -269,7 +289,7 @@ const Home = () => {
 
 
 const exitGroup = async() =>{
-    await axios.delete(`http://localhost:5000/exit-from-group/${exitId}`)
+    await axios.delete(`https://chatsbot-rwv2.onrender.com/exit-from-group/${exitId}`)
   }
   
 
@@ -285,20 +305,22 @@ const exitGroup = async() =>{
         <>
             <div className="groupsDiv">
 
-                <div className="groups" style={{ height: window.innerWidth>550?(window.innerHeight)/1.165 + "px":(window.innerHeight) - 80 + "px", maxWidth:window.innerWidth>550?(window.innerWidth)/2.4+'px':'-webkit-fill-available'}}>
-                    <div className="yourGroups" style={{maxWidth:window.innerWidth>550?(window.innerWidth)/2.4+'px':'-webkit-fill-available'}}>
+                <div className="groups" style={{ height: window.outerWidth>550?((window.innerHeight)/1.165) + "px":((window.innerHeight) - 80) + "px", maxWidth:window.outerWidth>550?(window.innerWidth)/2.4+'px':'-webkit-fill-available'}}>
+                    <div className="yourGroups" style={{maxWidth:window.outerWidth>550?(window.innerWidth)/2.4+'px':'-webkit-fill-available'}}>
+                    <input type="text" className="searchBar" placeholder="Search Group" onChange={searchHandel} />
 
                         {groups.length > 0 ? groups.map((item, index) =>
-                            <ul key={item._id} onClick={async (e) => {getMember();setItem(item); getChatData(); setExitId(item._id); messagesEndRef.current?.scrollIntoView(); }} style={{maxWidth:window.innerWidth>550?(window.innerWidth)/2.4+'px':'-webkit-fill-available'}}>
+                        item.userName === userName ?
+                            <ul key={item._id} onClick={async (e) => {getMember();setItem(item); getChatData(); setExitId(item._id); messagesEndRef.current?.scrollIntoView(); }} style={{maxWidth:window.outerWidth>550?(window.innerWidth)/2.4+'px':'-webkit-fill-available'}}>
                                 <li><img alt='...' src={item.image} /></li>
                                 <li><span>{item.groupName}</span></li>
-                            </ul>
+                            </ul>:''
                         )
                             : <h1>no group</h1>}
                     </div>
                 </div>
 
-                <div className="group-chat" style={{ height: window.innerWidth>550?(window.innerHeight)/1.165 + "px":(window.innerHeight) - 80 + "px", marginTop: window.innerWidth>550?("-" + (((window.innerHeight)/1.165) + (window.innerWidth>=551&&window.innerWidth<=768?9:window.innerWidth>=769&&window.innerWidth<=1024?14:20))) + "px":0 ,width:window.innerWidth>550?(window.innerWidth)/1.8+'px':'-webkit-fill-available'}}>
+                <div className="group-chat" style={{ height: window.outerWidth>550?((window.innerHeight)/1.165) + "px":((window.innerHeight) - 80) + "px", marginTop: window.outerWidth>550?("-" + (((window.innerHeight)/1.165) + (window.outerWidth>=551&&window.outerWidth<=768?9:window.outerWidth>=769&&window.outerWidth<=1024?14:20))) + "px":0 ,width:window.outerWidth>550?(window.innerWidth)/1.8+'px':'-webkit-fill-available'}}>
                     <div>
                         <div className="chatDiv">
                             {item === '' ? <h1 className="ifChat">Display chat</h1>
@@ -340,7 +362,7 @@ Exit</div>
                                     </li>
                                 </ul>
                                     <div className="chatSection">
-                                        <div className="messageDiv" style={{ maxHeight:window.innerWidth>550? ((window.innerHeight )/1.41)+(window.innerWidth>=551&&window.innerWidth<=768?9:window.innerWidth>=769&&window.innerWidth<=1024?14:-50)+ "px": (window.innerHeight ) - 160 + "px"}} ref={ref} >
+                                        <div className="messageDiv" style={{ maxHeight:window.outerWidth>550? ((window.innerHeight )/1.41)+(window.outerWidth>=551&&window.outerWidth<=768?9:window.outerWidth>=769&&window.outerWidth<=1024?14:-50)+ "px": (window.innerHeight ) - 160 + "px"}} ref={ref} >
                                             {
 
                                                 chatId.length > 0 ? chatId.map((item, index) =>(
@@ -375,7 +397,7 @@ Exit</div>
                                     <button className="cancelBtn" onClick={() => { setInviteVisibility('hidden') }}>Cancel</button>
                                 </div>
                             </div>
-                            <div className="memberDiv" style={{height:window.innerWidth>550? ((window.innerHeight )/1.41)+(window.innerWidth>=551&&window.innerWidth<=768?9:window.innerWidth>=769&&window.innerWidth<=1024?14:0)+ "px": (window.innerHeight ) - 160 + "px",top:window.innerWidth>550?(window.innerWidth)/18+'px':'8rem',visibility:memberVisibility,width:window.innerWidth>550?(window.innerWidth)/1.8+'px':'-webkit-fill-available'}}>
+                            <div className="memberDiv" style={{height:window.outerWidth>550? ((window.innerHeight )/1.41)+(window.outerWidth>=551&&window.outerWidth<=768?9:window.outerWidth>=769&&window.outerWidth<=1024?14:0)+ "px": (window.innerHeight ) - 160 + "px",top:window.outerWidth>550?(window.outerWidth)/18+'px':'8rem',visibility:memberVisibility,width:window.outerWidth>550?(window.outerWidth)/1.8+'px':'-webkit-fill-available'}}>
                             <div className="closeBtnDiv" style={{float:'inline-end'}}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" color="red" fill="currentColor" style={{cursor: 'pointer',position: 'relative',float: 'inline-end',top: '1rem',right:'1rem'}} className="bi bi-x-lg closeBtn" viewBox="0 0 16 16" onClick={()=>{setMemberVisibility('hidden')}} >
   <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>

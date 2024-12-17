@@ -23,9 +23,10 @@ const Nav = () =>{
   const [active,setActive] = useState('line3')
   const [left,setLeft] = useState(false)
 
+
   const accepiRef = useRef(null)
 
-  const socket = io.connect('http://localhost:5050')
+  const socket = io('https://chatsbot-rwv2.onrender.com')
 
   useEffect(()=>{
     if(auth){
@@ -67,7 +68,7 @@ const Nav = () =>{
 
   const getMessage = async() =>{
     if(auth){
-      await axios.get(`http://localhost:5000/new-message/${JSON.parse(localStorage.getItem('user')).email}`).then((res)=>{
+      await axios.get(`https://chatsbot-rwv2.onrender.com/new-message/${JSON.parse(localStorage.getItem('user')).email}`).then((res)=>{
         if(res){
             setNewMessage(res.data)
         }
@@ -85,7 +86,7 @@ const inviteHandle = async()=>{
   formData.append('email',JSON.parse(auth).email)
   formData.append('userName',JSON.parse(auth).name)
 
-  await axios.post(`http://localhost:5000/accept-invite`,formData,{
+  await axios.post(`https://chatsbot-rwv2.onrender.com/accept-invite`,formData,{
     headers:{
       "Content-Type":"application/json"
     }
@@ -98,7 +99,7 @@ const inviteHandle = async()=>{
 }
 
 const deleteMessage = async() =>{
-  await axios.delete(`http://localhost:5000/delete-invite-data/${messageId}`).then((res)=>{
+  await axios.delete(`https://chatsbot-rwv2.onrender.com/delete-invite-data/${messageId}`).then((res)=>{
     if(res){
       Navigate('/')
     }
@@ -118,7 +119,7 @@ window.addEventListener('scroll',getPosition)
         <div className='appName'>ChatsBot</div>
         <div className='navbar'>
           {auth ? <ul style={{position:'absolute',right:"5rem"}}>
-           { window.innerWidth>550?<>
+           { window.outerWidth>550?<>
             <li className="groups-bar"> <Link to={'/'}>Groups</Link></li>
             <li className="createGroup"> <Link to={'/create-group'}>Create Groups</Link></li>
             <li className='profile' onMouseLeave={()=>{setVisibility('hidden')}}>
@@ -137,7 +138,8 @@ window.addEventListener('scroll',getPosition)
             </li>
             </>:<>
             <li onClick={()=>{active === 'line3'?setActive("active line3"):setActive("line3");
-              (active!=="line3"?document.body.style.overflow='visible':document.body.style.overflow='hidden');
+              (active!=="line3"?document.body.style.overflowY='visible':document.body.style.overflowY='hidden');
+              document.body.style.overflowX='hidden'
               setLeft(!left);
               }}>
             <svg xmlns="http://www.w3.org/2000/svg"width={21} height={15} overflow={'visible'} viewBox="0 0 21 15" className={active}>
@@ -157,8 +159,8 @@ window.addEventListener('scroll',getPosition)
         </div>
       </div>
     </div>
-    <div>
-    <motion.div animate={{x:left?0:window.innerWidth}} transition={{type:"tween"}} initial={{x:window.innerWidth}} className="res-nav-bar">
+    <div>{window.outerWidth<550?
+    <motion.div animate={{x:left?0:window.outerWidth,display:left?'block':'none'}} transition={{type:"tween"}} initial={{x:window.outerWidth,display:'none'}} className="res-nav-bar">
                   <ul>
                   <li className="groups-bar" onClick={()=>{setLeft(!left);setActive("line3");document.body.style.overflow='visible'}}> <Link to={'/'}>Groups</Link></li>
             <li className="createGroup" onClick={()=>{setLeft(!left);setActive("line3")}}> <Link to={'/create-group'}>Create Groups</Link></li>
@@ -177,12 +179,12 @@ window.addEventListener('scroll',getPosition)
                 </div>
             </li>
                   </ul>
-                </motion.div>
+                </motion.div>:''}
                 </div>
                 
 
 
-    <div className="newMessageDiv" style={{height:((window.innerHeight / 10)-25 ) + "rem",width:((window.innerHeight / 10)) + "rem",top:((window.innerHeight / 10) - 20)/4 + "rem",visibility:messageVisibility}} >
+    <div className="newMessageDiv" style={{height:window.outerWidth>550? ((window.innerHeight )/1.41)+(window.outerWidth>=551&&window.outerWidth<=768?9:window.outerWidth>=769&&window.outerWidth<=1024?14:0)+ "px": (window.innerHeight ) - 160 + "px",top:window.outerWidth>550?(window.outerWidth)/18+'px':'8rem',width:window.outerWidth>550?(window.outerWidth)/1.8+'px':'-webkit-fill-available',visibility:messageVisibility}} >
                 <div className="closeBtnDiv" style={{float:'inline-end'}}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" color="red" fill="currentColor" style={{cursor:'pointer'}} class="bi bi-x-lg closeBtn" viewBox="0 0 16 16" onClick={()=>{setMessageVisibility('hidden')}} >
   <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>

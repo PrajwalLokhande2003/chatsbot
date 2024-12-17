@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const server = require('http').createServer(app)
+
 const cors = require('cors')
 require('./DB/config')
 const io = require('socket.io')(5050, {
@@ -79,6 +81,15 @@ app.post('/creategroup', upload.single('image'), async (req, res) => {
 app.get('/group&useriddata/:id', async (req, res) => {
     let groups = await GroupDetail.find({ userId: req.params.id })
     res.send(groups)
+})
+
+app.get('/search/:key', async(req,res)=>{
+    let result = await GroupDetail.find({
+        "$or":[
+            {name:{$regex:req.params.key}}
+        ]
+    })
+    res.send(result)
 })
 
 app.get('/groupdata/:id', async (req, res) => {

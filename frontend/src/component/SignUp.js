@@ -46,7 +46,7 @@ const SignUp = () =>{
 
     
     const getEmailId = async()=>{
-        await axios.get(`http://localhost:5000/check-email-account/${email}`).then((res)=>{
+        await axios.get(`https://chatsbot-rwv2.onrender.com/check-email-account/${email}`).then((res)=>{
             if(res){
                 socket.emit('addEmailId',res.data)
                 console.log(res.data);
@@ -74,7 +74,7 @@ const SignUp = () =>{
     formData.append('email',email)
     formData.append('password',password)
         
-        await axios.post('http://localhost:5000/signup',formData,{
+        await axios.post('https://chatsbot-rwv2.onrender.com/signup',formData,{
             headers:{
                 'Content-Type':'application/json'
             }

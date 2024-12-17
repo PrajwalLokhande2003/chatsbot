@@ -25,7 +25,7 @@ const userName = JSON.parse(localStorage.getItem('user')).name
         formData.append('image',image)
         formData.append('userId',userId)
 
-        await axios.post('http://localhost:5000/creategroup',formData,{
+        await axios.post('https://chatsbot-rwv2.onrender.com/creategroup',formData,{
             headers:{
                 'Content-Type':'multipart/form-data'
             }
@@ -33,19 +33,19 @@ const userName = JSON.parse(localStorage.getItem('user')).name
             if(res){
                 alert('group create successfully...')
                 Navigate('/')
-                const formData = new FormData()
-  formData.append('groupId',res.data._id)
-  formData.append('userId',userId)
-  formData.append('image',res.data.image)
-  formData.append('groupName',res.data.groupName)
-  formData.append('email',email)
-  formData.append('userName',userName)
+//                 const formData = new FormData()
+//   formData.append('groupId',res.data._id)
+//   formData.append('userId',userId)
+//   formData.append('image',res.data.image)
+//   formData.append('groupName',res.data.groupName)
+//   formData.append('email',email)
+//   formData.append('userName',userName)
 
-  await axios.post(`http://localhost:5000/accept-invite`,formData,{
-    headers:{
-      "Content-Type":"application/json"
-    }
-  })
+//   await axios.post(`https://chatsbot-rwv2.onrender.com/accept-invite`,formData,{
+//     headers:{
+//       "Content-Type":"application/json"
+//     }
+//   })
                 
             }
         })
@@ -57,7 +57,7 @@ const userName = JSON.parse(localStorage.getItem('user')).name
         <>
         <div className='createGroupMain' style={{margin : window.innerWidth>550?'10rem 50rem':'25% 2rem'}}>
             <div className='uDiv'>
-            <input type='file' className='upload'  style={{background:`url(${groupImage})`+'0% 0% / cover'}}   onChange={(e)=>{setImage(e.target.files[0]);setGroupImage(URL.createObjectURL(e.target.files[0]))}} />
+            <input type='file' className='upload'  style={{background:`url(${groupImage}) 0% 0% / cover`}}   onChange={(e)=>{setImage(e.target.files[0]);setGroupImage(URL.createObjectURL(e.target.files[0]))}} />
             </div>
             <input type='text' className='groupName' placeholder='enter group name' value={groupName} onChange={(e)=>{setGroupName(e.target.value)}}/>
             <button className='createBtn' onClick={createGroup} style={{marginLeft:window.innerWidth>550?'30%':'35%'}}>Create Group</button>
