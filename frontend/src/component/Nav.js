@@ -22,6 +22,7 @@ const Nav = () =>{
   const Navigate = useNavigate();
   const [active,setActive] = useState('line3')
   const [left,setLeft] = useState(false)
+    const [check,setCheck] = useState(false)
 
 
   const accepiRef = useRef(null)
@@ -78,6 +79,9 @@ const Nav = () =>{
 }
 
 const inviteHandle = async()=>{
+
+  setCheck(true)
+  
   const formData = new FormData()
   formData.append('groupId',groupId)
   formData.append('userId',userId)
@@ -200,7 +204,9 @@ window.addEventListener('scroll',getPosition)
                                       <div className="dateDiv" style={{padding:'1rem'}}>{item.date}</div> <div className="timeDiv">{item.time}</div> Hey {userName}, I am {item.userName} Inviting you to join {item.groupName} Group
                                       </div>
                                       <div className="btnDiv">
-                                        <button className="acceptBtn" ref={accepiRef} onClick={async()=>{setGroupId(item.groupId);setImage(item.image);setGroupName(item.groupName);getMessage();accepiRef.current.innertext = 'please wait ...';groupId!==''&&image!==''&&groupName!==''?await inviteHandle():setGroupId(item.groupId);setImage(item.image);setGroupName(item.groupName);setMessageId(item._id);}}>Accept Invite</button>
+                                        <button className="acceptBtn" ref={accepiRef} onClick={async()=>{setGroupId(item.groupId);setImage(item.image);setGroupName(item.groupName);getMessage();accepiRef.current.innertext = 'please wait ...';groupId!==''&&image!==''&&groupName!==''?await inviteHandle():setGroupId(item.groupId);setImage(item.image);setGroupName(item.groupName);setMessageId(item._id);}} disabled={check}>{check?<div class="spinner-border spinner-border-sm" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>:"Accept Invite"}</button>
                                         <button className="cancelBtn" onClick={async()=>{(messageId!==''?await deleteMessage() :setMessageId(item._id));getMessage()}}>Cancel Invite</button>
                                       </div>
                                     </div>

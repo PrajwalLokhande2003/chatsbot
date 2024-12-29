@@ -20,6 +20,7 @@ const SignUp = () =>{
     const [checkEmail,setCheckEmail] = useState('')
     const [visibility,setVisibility] = useState('')
     const [color,setColor] = useState('')
+    const [check,setCheck] = useState(false)
 
     const div = useRef(null)
 
@@ -69,6 +70,8 @@ const SignUp = () =>{
 
     const signUp = async(e) =>{
 
+        setCheck(true)
+
         const formData = new FormData()
     formData.append('name',name)
     formData.append('email',email)
@@ -111,7 +114,9 @@ const SignUp = () =>{
             <input type="email" className="email" value={email} onChange={(e)=>{emailEvent(e);setVisibility('hidden')}} placeholder="enter email" required/>
             <div className="check" ref={div} style={{visibility:visibility,color:color}}></div>
             <input type="password" className="password" value={password} onChange={passwordEvent} placeholder="enter password" required/>
-            <button type="submit" className="submitBtn" onClick={(e)=>{clickOn(e)}}>SignUp</button>
+            <button type="submit" className="submitBtn" onClick={(e)=>{clickOn(e)}} disabled={check}>{check?<div class="spinner-border spinner-border-sm" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>:"SignUp"}</button>
         </form>
     </div>
     </>

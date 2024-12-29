@@ -13,6 +13,7 @@ const LogIn = () =>{
 
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
+    const [check,setCheck] = useState(false)
 
     const emailEvent = (e) =>{
         setEmail(e.target.value)
@@ -28,6 +29,7 @@ const LogIn = () =>{
 
     const logIn = async(e) =>{
         e.preventDefault()
+        setCheck(true)
         
         await axios.post('https://chatsbot-rwv2.onrender.com/login',formData,{
             headers:{
@@ -48,7 +50,7 @@ const LogIn = () =>{
         <form className="loginForm">
             <input type="email" className="email" placeholder="enter email" value={email} onChange={emailEvent}/>
             <input type="password" className="password" placeholder="enter password" value={password} onChange={passwordEvent}/>
-            <button type="submit" className="submitBtn" onClick={logIn}>LogIn</button>
+            <button type="submit" className="submitBtn" onClick={logIn} disabled={check}>{check?<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>:"LogIn"}</button>
         </form>
     </div>
     </>
