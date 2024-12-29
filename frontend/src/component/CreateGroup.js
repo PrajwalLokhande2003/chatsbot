@@ -45,11 +45,19 @@ const userName = JSON.parse(localStorage.getItem('user')).name
   formData.append('email',email)
   formData.append('userName',userName)
 
+<<<<<<< HEAD
   await axios.post(`https://chatsbot-rwv2.onrender.com/accept-invite`,formData,{
     headers:{
       "Content-Type":"application/json"
     }
   })
+=======
+//   await axios.post(`http://localhost:5000/accept-invite`,formData,{
+//     headers:{
+//       "Content-Type":"application/json"
+//     }
+//   })
+>>>>>>> 8a6b32c9a9684257411c0d7261be41b47d412a57
                 
             }
         })

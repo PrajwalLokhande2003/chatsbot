@@ -1,9 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import {io} from 'socket.io-client'
-import {animate, motion} from 'framer-motion'
+import {motion} from 'framer-motion'
 
 const Nav = () =>{
 
@@ -27,7 +27,7 @@ const Nav = () =>{
 
   const accepiRef = useRef(null)
 
-  const socket = io('https://chatsbot-rwv2.onrender.com')
+  const socket = io.connect('http://localhost:5050')
 
   useEffect(()=>{
     if(auth){
@@ -163,8 +163,8 @@ window.addEventListener('scroll',getPosition)
         </div>
       </div>
     </div>
-    <div>{window.outerWidth<550?
-    <motion.div animate={{x:left?0:window.outerWidth,display:left?'block':'none'}} transition={{type:"tween"}} initial={{x:window.outerWidth,display:'none'}} className="res-nav-bar">
+    <div>
+    <motion.div animate={{x:left?0:window.innerWidth}} transition={{type:"tween"}} initial={{x:window.innerWidth}} className="res-nav-bar">
                   <ul>
                   <li className="groups-bar" onClick={()=>{setLeft(!left);setActive("line3");document.body.style.overflow='visible'}}> <Link to={'/'}>Groups</Link></li>
             <li className="createGroup" onClick={()=>{setLeft(!left);setActive("line3")}}> <Link to={'/create-group'}>Create Groups</Link></li>
@@ -183,7 +183,7 @@ window.addEventListener('scroll',getPosition)
                 </div>
             </li>
                   </ul>
-                </motion.div>:''}
+                </motion.div>:''
                 </div>
                 
 

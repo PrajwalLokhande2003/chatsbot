@@ -1,12 +1,11 @@
 const express = require('express');
 const app = express();
-const server = require('http').createServer(app)
-
 const cors = require('cors')
 require('./DB/config')
-const io = require('socket.io')(5050, {
+const PORT = process.env.PORT || 5000
+const io = require('socket.io')(server,{
     cors: {
-        origin: ['http://localhost:3000']
+        origin: '*'
     }
 })
 
@@ -17,7 +16,7 @@ const multer = require('multer')
 // const path = require('path')
 // const Jwt = require('jsonwebtoken')
 // const jwtKey = process.env.JWT_TOKEN
-const PORT = process.env.PORT || 5000
+
 const User = require('./DB/users');
 const Group = require('./DB/group');
 const GroupDetail = require('./DB/groupsdetails');
@@ -81,15 +80,6 @@ app.post('/creategroup', upload.single('image'), async (req, res) => {
 app.get('/group&useriddata/:id', async (req, res) => {
     let groups = await GroupDetail.find({ userId: req.params.id })
     res.send(groups)
-})
-
-app.get('/search/:key', async(req,res)=>{
-    let result = await GroupDetail.find({
-        "$or":[
-            {name:{$regex:req.params.key}}
-        ]
-    })
-    res.send(result)
 })
 
 app.get('/groupdata/:id', async (req, res) => {
@@ -267,5 +257,5 @@ app.delete('/exit-from-group/:id',async(req,res)=>{
 
 
 
-app.listen(PORT);
+server.listen(PORT);
 
