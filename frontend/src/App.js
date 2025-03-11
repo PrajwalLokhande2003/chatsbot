@@ -7,8 +7,10 @@ import LogIn from './component/LogIn';
 import Home from './component/Home';
 import PrivateComponent from './component/PrivateComponent';
 import CreateGroup from './component/CreateGroup';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
+  document.documentElement.setAttribute('setting','no')
   return (
     <>
     <BrowserRouter>
@@ -23,7 +25,10 @@ function App() {
       <Route path='/login' element={<LogIn/>}/>
     </Routes>
     </BrowserRouter>
-    
+    <ToastContainer 
+    className="fs-3"
+    autoClose={5000}
+     />
 
     </>
   );

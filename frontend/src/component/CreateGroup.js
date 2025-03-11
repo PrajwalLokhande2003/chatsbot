@@ -1,81 +1,91 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify';
 
-const CreateGroup = () =>{
+const CreateGroup = () => {
 
-    const [groupName,setGroupName] = useState('')
-    const [image,setImage] = useState('')
-    const [groupImage,setGroupImage] = useState('')
-    const [check,setCheck] = useState(false)
+    const [groupName, setGroupName] = useState('')
+    const [image, setImage] = useState('no')
+    const [groupImage, setGroupImage] = useState('')
+    const [check, setCheck] = useState(false)
+    const BASE_URL = process.env.REACT_APP_BASE_URL
 
-    const Navigate = useNavigate()
+    const Navigate = useNavigate();
 
-    useEffect(()=>{
+
+    useEffect(() => {
         setGroupImage(`https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868853.jpg`)
-        
-    },[])
-const userId = JSON.parse(localStorage.getItem('user'))._id
-const email = JSON.parse(localStorage.getItem('user')).email
-const userName = JSON.parse(localStorage.getItem('user')).name
-    const createGroup = async (e) =>{
+
+    }, [])
+    const userId = JSON.parse(localStorage.getItem('user'))._id
+    const email = JSON.parse(localStorage.getItem('user')).email
+    const userName = JSON.parse(localStorage.getItem('user')).name
+    const createGroup = async (e) => {
         e.preventDefault()
 
         setCheck(true)
 
         const formData = new FormData()
-        formData.append('groupName',groupName)
-        formData.append('image',image)
-        formData.append('userId',userId)
+        formData.append('groupName', groupName)
+        formData.append('image', image)
+        formData.append('userId', userId)
 
-        await axios.post('https://chatsbot-rwv2.onrender.com/creategroup',formData,{
-            headers:{
-                'Content-Type':'multipart/form-data'
+        await axios.post(`${BASE_URL}/creategroup`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
             }
-        }).then(async(res)=>{
-            if(res){
-                alert('group create successfully...')
-                Navigate('/')
-                window.location.reload()
+        }).then(async (res) => {
+            if (res) {
                 const formData = new FormData()
-  formData.append('groupId',res.data._id)
-  formData.append('userId',userId)
-  formData.append('image',res.data.image)
-  formData.append('groupName',res.data.groupName)
-  formData.append('email',email)
-  formData.append('userName',userName)
+                formData.append('groupId', res.data._id)
+                formData.append('userId', userId)
+                formData.append('image', res.data.image)
+                formData.append('groupName', res.data.groupName)
+                formData.append('email', email)
+                formData.append('userName', userName)
 
-<<<<<<< HEAD
-  await axios.post(`https://chatsbot-rwv2.onrender.com/accept-invite`,formData,{
-    headers:{
-      "Content-Type":"application/json"
-    }
-  })
-=======
-//   await axios.post(`http://localhost:5000/accept-invite`,formData,{
-//     headers:{
-//       "Content-Type":"application/json"
-//     }
-//   })
->>>>>>> 8a6b32c9a9684257411c0d7261be41b47d412a57
-                
+                await axios.post(`${BASE_URL}/accept-invite`, formData, {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                }).then(res => {
+                    if (res) {
+                        console.log(res.data);
+                        
+                        toast('group create successfully...')
+                        Navigate('/')
+                        window.location.reload()
+                    }
+                })
+
             }
         })
     }
+    console.log(image);
 
-    
 
-    return(
+
+    return (
         <>
-        <div className='createGroupMain' style={{margin : window.innerWidth>550?'10rem 50rem':'25% 2rem'}}>
-            <div className='uDiv'>
-            <input type='file' className='upload'  style={{background:`url(${groupImage}) 0% 0% / cover`}}   onChange={(e)=>{setImage(e.target.files[0]);setGroupImage(URL.createObjectURL(e.target.files[0]))}} />
+            <div className='row position-absolute w-100 h-100 d-flex align-items-center m-auto'>
+                <div className='card offset-sm-2 col-sm-8 offset-sm-2 '>
+                    <div className='card-body'>
+                        <div className='uDiv d-flex justify-content-center mb-3'>
+                            <input type='file' className='upload' style={{ background: `url(${groupImage}) 0% 0% / cover` }} onChange={(e) => { setImage(e.target.files[0]); setGroupImage(URL.createObjectURL(e.target.files[0])) }} />
+                        </div>
+                        <div className='my-3'>
+                            <input type='text' className=' form-control fs-3 text-center' placeholder='enter group name' value={groupName} onChange={(e) => { setGroupName(e.target.value) }} />
+                        </div>
+                        <div className=' d-flex justify-content-center'>
+                            <button className='createBtn' onClick={createGroup} disabled={check}>{check ?
+                                <div class="spinner-border spinner-border-sm" style={{ height: '2rem', width: '2rem' }} role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div> : "Create Group"}</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <input type='text' className='groupName' placeholder='enter group name' value={groupName} onChange={(e)=>{setGroupName(e.target.value)}}/>
-            <button className='createBtn' onClick={createGroup} style={{marginLeft:window.innerWidth>550?'30%':'35%'}} disabled={check}>{check?<div class="spinner-border spinner-border-sm" role="status">
-  <span class="visually-hidden">Loading...</span>
-</div>:"Create Group"}</button>
-        </div>
         </>
     )
 }

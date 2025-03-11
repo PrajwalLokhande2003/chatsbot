@@ -8,6 +8,7 @@ const messageSchema = new mongoose.Schema({
     groupName:String,
     userName:String,
     image:String,
+    view : Number
 })
 
 module.exports = mongoose.model('message',messageSchema)

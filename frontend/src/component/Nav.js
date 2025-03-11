@@ -2,222 +2,265 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import {io} from 'socket.io-client'
-import {motion} from 'framer-motion'
+import { io } from 'socket.io-client'
+import { motion } from 'framer-motion'
+import { toast } from 'react-toastify';
+import Setting from "./Setting";
 
-const Nav = () =>{
+const Nav = () => {
 
   const auth = localStorage.getItem('user');
-  const [visibility,setVisibility] = useState('')
-  const [messageVisibility,setMessageVisibility] = useState('hidden')
-  const [bell,setBell] = useState('')
-  const [groupId,setGroupId] = useState('')
-  const [image,setImage] = useState('')
-  const [groupName,setGroupName] = useState('')
-  const [messageId,setMessageId] = useState('')
-    const [newMessage,setNewMessage] = useState('')
-    const [userName,setUserName] = useState('')
-    const [userId,setUserId] = useState('')
-    const [position,setPosition] = useState('')
+  const [visibility, setVisibility] = useState('')
+  const [messageDisplay, setMessageDisplay] = useState('d-none')
+  const [groupId, setGroupId] = useState('')
+  const [image, setImage] = useState('')
+  const [groupName, setGroupName] = useState('')
+  const [messageId, setMessageId] = useState('')
+  const [newMessage, setNewMessage] = useState([])
+  const [userName, setUserName] = useState('')
+  const [userId, setUserId] = useState('')
+  const [position, setPosition] = useState('relative')
   const Navigate = useNavigate();
-  const [active,setActive] = useState('line3')
-  const [left,setLeft] = useState(false)
-    const [check,setCheck] = useState(false)
+  const [active, setActive] = useState('line3')
+  const [left, setLeft] = useState(false)
+  const [check, setCheck] = useState(false)
+  const [bell, setBell] = useState('')
+  const [email,setEmail] = useState('')
+  const [settingClass,setSettingClass] = useState('d-none')
+
+  const acceptRef = useRef(null)
+
+  const BASE_URL = process.env.REACT_APP_BASE_URL
+
+  const socket = io(`${BASE_URL}`, { autoConnect: false })
 
 
-  const accepiRef = useRef(null)
-
-  const socket = io.connect('http://localhost:5050')
-
-  useEffect(()=>{
-    if(auth){
-    setUserName(JSON.parse(localStorage.getItem('user')).name)
-    setUserId(JSON.parse(localStorage.getItem('user'))._id)
+  useEffect(() => {
+    if (auth) {
+      setUserName(JSON.parse(localStorage.getItem('user')).name)
+      setUserId(JSON.parse(localStorage.getItem('user'))._id)
+      setEmail(JSON.parse(localStorage.getItem('user')).email)
+      setBell(JSON.parse(localStorage.getItem('notification')).display)
     }
-  })
+  },[])
 
-    // const userEmail = JSON.parse(localStorage.getItem('user')).email
-    // const userName = JSON.parse(localStorage.getItem('user')).name
-    // const userId = JSON.parse(localStorage.getItem('user'))._id
-    
-
-    useEffect(()=>{
-      getMessage()
-    },[newMessage.length])
-
-    useEffect(()=>{  
-      socket.on('connection',null);
-      socket.on('getInvite',data =>{
-          setNewMessage((prev)=>[...prev ,data ])
-          if(auth && data.email ===(JSON.parse(auth).email)){
-            setBell('visible')
-          }
-          
-          
-      })
-      return()=>
-          socket.off('getMessage');
-      
   
-},[]) 
-    
 
-  const LogOut = () =>{
+
+  useEffect(() => {
+    getMessage()
+  }, [newMessage.length])
+
+  useEffect(() => {
+    const socket = io(`${BASE_URL}`)
+  const notify = new Audio('audio/notification-22-270130.mp3')
+    socket.on('getInvite', data => {
+    return (
+    setNewMessage((prev) => [...prev, data]),
+    data.email === JSON.parse(localStorage.getItem('user')).email ?setTimeout(() => {
+       localStorage.setItem('notification',JSON.stringify({'display':'d-flex'}));
+       notify.play()
+       setBell(JSON.parse(localStorage.getItem('notification')).display)
+       toast("Your getting new message")
+    }, 10):'',
+    console.log(data)
+    
+    
+    )
+    })
+    return () => {
+      socket.off('getInvite');
+      socket.disconnect()
+  }
+
+  },[])
+
+
+  const LogOut = () => {
     localStorage.clear()
     Navigate('/login')
   }
 
-  const getMessage = async() =>{
-    if(auth){
-      await axios.get(`https://chatsbot-rwv2.onrender.com/new-message/${JSON.parse(localStorage.getItem('user')).email}`).then((res)=>{
-        if(res){
-            setNewMessage(res.data)
+  const getMessage = async () => {
+    if (auth) {
+      await axios.get(`${BASE_URL}/new-message/${JSON.parse(localStorage.getItem('user')).email}`).then((res) => {
+        if (res) {
+          setNewMessage(res.data)
+          
         }
+      })
+
+    }
+  }
+
+  const inviteHandle = async () => {
+
+    setCheck(true)
+
+    const formData = new FormData()
+    formData.append('groupId', groupId)
+    formData.append('userId', userId)
+    formData.append('image', image)
+    formData.append('groupName', groupName)
+    formData.append('email', JSON.parse(auth).email)
+    formData.append('userName', JSON.parse(auth).name)
+
+    await axios.post(`${BASE_URL}/accept-invite`, formData, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(async (res) => {
+      if (res.data) {
+        await deleteMessage()
+        window.location.reload()
+
+      }
     })
-    
-    }
-}
+  }
 
-const inviteHandle = async()=>{
+  const deleteMessage = async () => {
+    await axios.delete(`${BASE_URL}/delete-invite-data/${messageId}`).then((res) => {
+      if (res) {
+        Navigate('/')
+      }
+    })
+  }
 
-  setCheck(true)
+  const getPosition = () => {
+    window.scrollY > 100 ? setPosition('fixed') : setPosition('relative')
+  }
+
+  window.addEventListener('scroll', getPosition)
+
+  let sum = 0
   
-  const formData = new FormData()
-  formData.append('groupId',groupId)
-  formData.append('userId',userId)
-  formData.append('image',image)
-  formData.append('groupName',groupName)
-  formData.append('email',JSON.parse(auth).email)
-  formData.append('userName',JSON.parse(auth).name)
+  for(let i=0;i<newMessage.length;i++){
+    sum+=newMessage[i].view
+  }
 
-  await axios.post(`https://chatsbot-rwv2.onrender.com/accept-invite`,formData,{
-    headers:{
-      "Content-Type":"application/json"
+  async function updateView(){
+    const formData = new FormData()
+    formData.append('view', 0)
+  await axios.put(`${BASE_URL}/update-invite-view/${email}`,formData,{
+    headers: {
+        'Content-Type': 'application/json',
     }
-  }).then(async(res)=>{
+   }).then((res)=>{
     if(res){
-      deleteMessage()
-      window.location.reload()
+      localStorage.setItem('notification',JSON.stringify({'display':'d-none'}))
     }
-  })
-}
+   })
+  }
+  
 
-const deleteMessage = async() =>{
-  await axios.delete(`https://chatsbot-rwv2.onrender.com/delete-invite-data/${messageId}`).then((res)=>{
-    if(res){
-      Navigate('/')
-    }
-  })
-}
-
-const getPosition = () =>{
-  document.documentElement.scrollTop>70?setPosition('fixed'):setPosition('relative')
-}
-
-window.addEventListener('scroll',getPosition)
-
-    return(
-        <>
-        <div className="App">
-      <div className='header' style={{position:position}}>
-        <div className='appName'>ChatsBot</div>
-        <div className='navbar'>
-          {auth ? <ul style={{position:'absolute',right:"5rem"}}>
-           { window.outerWidth>550?<>
-            <li className="groups-bar"> <Link to={'/'}>Groups</Link></li>
-            <li className="createGroup"> <Link to={'/create-group'}>Create Groups</Link></li>
-            <li className='profile' onMouseLeave={()=>{setVisibility('hidden')}}>
-              <div className="profileDiv" onMouseOver={()=>{setVisibility('visible')}} >Profile
-              <div className="bell">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" style={{visibility:bell}}  fill="currentColor" class="bi bi-bell-fill bellIcon" viewBox="0 0 16 16">
-  <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
-</svg>
+  return (
+    <>
+      <div className='header w-100 top-0 z-3' style={{ position: position }}>
+        <div className="container-fluid d-flex align-items-center">
+          <div className='appName'>WebChat</div>
+          <div className='navBar w-100 d-flex align-items-center'>
+            {auth ? <>
+              <div className="bar d-flex w-100 justify-content-evenly fs-3">
+                <div className="groups-bar"> <Link to={'/'}>Groups</Link></div>
+                <div className="createGroup"> <Link to={'/create-group'}>Create Groups</Link></div>
+                <div className='profile cursor-pointer justify-content-center' onMouseLeave={() => { setVisibility('hidden') }} onMouseOver={() => { setVisibility('visible') }}>
+                  <div className="profileDiv d-flex align-items-center"  >Profile
+                    <span className={"badge badge-light bg-info fs-6 "+ bell}>{sum}</span>
                   </div>
-              </div>
-              <div className="option" style={{visibility:visibility}}>
-                
-              <div className="newMessage"  style={{cursor:'pointer',fontSize:'2rem',padding:'1rem'}} onClick={()=>{setMessageVisibility('visible');setBell('hidden')}}>Messages</div>
-                  <button className="logout" onClick={()=>{LogOut();window.location.reload()}}>LogOut</button>
+                  <div className="option show position-absolute z-2 mt-6 p-4" style={{ visibility: visibility }}>
+
+                    <div className="newMessage fs-4 p-3" style={{ cursor: 'pointer' }} onClick={() => { setMessageDisplay('d-block'); updateView() }}>Messages</div>
+                    <div className="fs-4 d-flex justify-content-center mb-3" onClick={()=>{document.documentElement.setAttribute('setting','show')}}>Setting</div>
+                    <button className="logout mb-1 fs-5 m-auto" onClick={() => { LogOut(); window.location.reload() }}>LogOut</button>
+                  </div>
                 </div>
-            </li>
-            </>:<>
-            <li onClick={()=>{active === 'line3'?setActive("active line3"):setActive("line3");
-              (active!=="line3"?document.body.style.overflowY='visible':document.body.style.overflowY='hidden');
-              document.body.style.overflowX='hidden'
-              setLeft(!left);
-              }}>
-            <svg xmlns="http://www.w3.org/2000/svg"width={21} height={15} overflow={'visible'} viewBox="0 0 21 15" className={active}>
-            <rect height="2" width="20" y="0" rx="1" ry="1" className="top-line"></rect> 
-            <rect height="2" width="20" y="5" rx="1" ry="1" className="mid-line"></rect> 
-            <rect height="2" width="20" y="10" rx="1" ry="1" className="bottom-line"></rect>
-            </svg>
-            </li>
-            </>}
-            
-            </ul>:
-            <ul style={{position:'absolute',right:"5rem"}}>
-            <li className='signup'><Link to={'/signup'}>SignUp</Link></li>
-            <li className='login'><Link to={'/login'}>LogIn</Link></li>
-            {/* <li onClick={loginWithRedirect()}>LogIn</li> */}
-          </ul>}
+                <div className=" cursor-pointer show d-flex justify-content-end mx-3 position-absolute end-0">
+                  <div onClick={() => {
+                    active === 'line3' ? setActive("active line3") : setActive("line3");
+                    (active !== "line3" ? document.body.style.overflowY = 'visible' : document.body.style.overflowY = 'hidden');
+                    document.body.style.overflowX = 'hidden'
+                    setLeft(!left);
+                  }} className="show">
+                    <svg xmlns="http://www.w3.org/2000/svg" width={21} height={15} overflow={'visible'} viewBox="0 0 21 15" className={active + ' show'} >
+                      <rect height="2" width="20" y="0" rx="1" ry="1" className="top-line show"></rect>
+                      <rect height="2" width="20" y="5" rx="1" ry="1" className="mid-line show"></rect>
+                      <rect height="2" width="20" y="10" rx="1" ry="1" className="bottom-line show"></rect>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </>
+
+              :
+              ''}
+          </div>
         </div>
       </div>
-    </div>
-    <div>
-    <motion.div animate={{x:left?0:window.innerWidth}} transition={{type:"tween"}} initial={{x:window.innerWidth}} className="res-nav-bar">
-                  <ul>
-                  <li className="groups-bar" onClick={()=>{setLeft(!left);setActive("line3");document.body.style.overflow='visible'}}> <Link to={'/'}>Groups</Link></li>
-            <li className="createGroup" onClick={()=>{setLeft(!left);setActive("line3")}}> <Link to={'/create-group'}>Create Groups</Link></li>
-            <li className='profile' onMouseLeave={()=>{setVisibility('hidden')}}>
-              <div className="profileDiv" onMouseOver={()=>{setVisibility('visible')}} >Profile
-              <div className="bell">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" style={{visibility:bell}}  fill="currentColor" class="bi bi-bell-fill bellIcon" viewBox="0 0 16 16">
-  <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
-</svg>
-                  </div>
+      <div>
+
+        <motion.div animate={{ marginRight: left ? 0 : -160 }} transition={{ type: "tween" }} initial={{ marginRight: -160 }} className={"res-nav-bar z-2 "}>
+          <ul>
+            <li className="groups-bar" onClick={() => { setLeft(!left); setActive("line3"); document.body.style.overflow = 'visible' }}> <Link to={'/'}>Groups</Link></li>
+            <li className="createGroup" onClick={() => { setLeft(!left); setActive("line3") }}> <Link to={'/create-group'}>Create Groups</Link></li>
+            <li className='profile' onMouseLeave={() => { setVisibility('hidden') }}>
+              <div className="profileDiv d-flex align-items-center" onMouseOver={() => { setVisibility('visible') }} >Profile
+                
+                  {/* <i className={"bi bi-bell-fill text-danger "+ bell}></i> */}
+                  <span className={"badge badge-light bg-info "+ bell}>{sum}</span>
+                
               </div>
-              <div className="option" style={{visibility:visibility ,boxShadow:'1px 1px 1px,-1px -1px 1px'}}>
-                
-              <div className="newMessage"  style={{cursor:'pointer',fontSize:'2rem',padding:'1rem'}} onClick={()=>{setMessageVisibility('visible');setBell('hidden')}}>Messages</div>
-                  <button className="logout" onClick={()=>{LogOut();window.location.reload()}}>LogOut</button>
+              <div className=" position-absolute w-100 start-0 p-2 fs-4">
+                <div className="option " style={{ visibility: visibility, boxShadow: '1px 1px 1px,-1px -1px 1px' }}>
+
+                  <div className="newMessage py-2" style={{ cursor: 'pointer', padding: '1rem' }} onClick={() => { setMessageDisplay('d-block');updateView() }}>Messages</div>
+                  <div className="fs-4 d-flex justify-content-center mb-3" onClick={()=>{document.documentElement.setAttribute('setting','show')}}>Setting</div>
+                  <button className="logout fs-4 py-2 mb-1" onClick={() => { LogOut(); window.location.reload() }}>LogOut</button>
                 </div>
+              </div>
             </li>
-                  </ul>
-                </motion.div>:''
-                </div>
-                
+          </ul>
+        </motion.div>
+      </div>
 
 
-    <div className="newMessageDiv" style={{height:window.outerWidth>550? ((window.innerHeight )/1.41)+(window.outerWidth>=551&&window.outerWidth<=768?9:window.outerWidth>=769&&window.outerWidth<=1024?14:0)+ "px": (window.innerHeight ) - 160 + "px",top:window.outerWidth>550?(window.outerWidth)/18+'px':'8rem',width:window.outerWidth>550?(window.outerWidth)/1.8+'px':'-webkit-fill-available',visibility:messageVisibility}} >
-                <div className="closeBtnDiv" style={{float:'inline-end'}}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" color="red" fill="currentColor" style={{cursor:'pointer'}} class="bi bi-x-lg closeBtn" viewBox="0 0 16 16" onClick={()=>{setMessageVisibility('hidden')}} >
-  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-</svg>
-                </div>
-                    <div className="messDiv">
-                        {
-                            newMessage.length>0? newMessage.map((item,index)=>{
-                                return(
-                                    <>
-                                    <div className="message">
-                                      <div>
-                                      <div className="dateDiv" style={{padding:'1rem'}}>{item.date}</div> <div className="timeDiv">{item.time}</div> Hey {userName}, I am {item.userName} Inviting you to join {item.groupName} Group
-                                      </div>
-                                      <div className="btnDiv">
-                                        <button className="acceptBtn" ref={accepiRef} onClick={async()=>{setGroupId(item.groupId);setImage(item.image);setGroupName(item.groupName);getMessage();accepiRef.current.innertext = 'please wait ...';groupId!==''&&image!==''&&groupName!==''?await inviteHandle():setGroupId(item.groupId);setImage(item.image);setGroupName(item.groupName);setMessageId(item._id);}} disabled={check}>{check?<div class="spinner-border spinner-border-sm" role="status">
-  <span class="visually-hidden">Loading...</span>
-</div>:"Accept Invite"}</button>
-                                        <button className="cancelBtn" onClick={async()=>{(messageId!==''?await deleteMessage() :setMessageId(item._id));getMessage()}}>Cancel Invite</button>
-                                      </div>
-                                    </div>
-                                    </>
-                                )
-                            }):<h1>there is no message</h1>
 
-                        }
+      <div className={" container card  h-100 position-absolute z-3 pb-5 overflow-hidden fs-3 bg-transparent text-white  " + messageDisplay} style={{ backdropFilter:'blur(5px)' }}>
+        <div className=" card-header position-sticky justify-content-between d-flex mt-1" >
+          <div className="fs-3 text-dark fw-bold">Your Messages</div>
+          <div className="d-flex justify-content-end"><i className="bi bi-x-circle text-danger fs-2" onClick={() => { setMessageDisplay('d-none') }}></i></div>
+        </div>
+        <div className=" px-4 d-flex justify-content-center pb-4  h-100 card-body " >
+
+          <div className="row h-100 overflow-scroll pb-4 scroll-bar-none">
+            {
+              newMessage.length > 0 ? newMessage.map((item, index) => {
+                return (
+                  <>
+                  <div className={ " justify-content-center "+(item.view !== newMessage[(index>0?index-1:index)].view?'d-flex':'d-none')} style={{boxShadow: '0px 1px 30px #000000c4 inset'}}>unread message</div>
+                    <div className=" d-grid  bg-warning w-100 align-items-center mb-2 bg-opacity-25 col-12 rounded-4">
+                      
+                        <div className=" fs-3 d-flex row w-100"><span className="w-75">{item.date}</span> <span className="w-25 fs-5 d-flex justify-content-end">{item.time}</span></div>
+                        <div className=" d-flex justify-content-center mb-3">Hey {userName}, I am {item.userName} Inviting you to join {item.groupName} Group</div>
+                      <div className="d-flex justify-content-evenly mb-3">
+                        <button className="btn btn-success fs-4" ref={acceptRef} onClick={async () => { setGroupId(item.groupId); setImage(item.image); setGroupName(item.groupName); getMessage(); groupId !== '' && groupName !== '' ? await inviteHandle() : setGroupId(item.groupId); setImage(item.image); setGroupName(item.groupName); setMessageId(item._id); }} disabled={check}>
+                          {check ?
+                            <div class="spinner-border spinner-border-sm" style={{ height: '2rem', width: '2rem' }} role="status">
+                              <span class="visually-hidden">Loading...</span>
+                            </div> : "Accept Invite"}</button>
+                        <button className="btn btn-danger fs-4" onClick={async () => { (messageId !== '' ? await deleteMessage() : setMessageId(item._id)); getMessage() }}>Cancel Invite</button>
+                      </div>
                     </div>
-                </div>
-        </>
-    );
+                  </>
+                )
+              }) : <h3>there is no message </h3>
+
+            }
+          </div>
+        </div>
+      </div>
+
+      <Setting/>
+    </>
+  );
 }
 export default Nav;
