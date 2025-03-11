@@ -110,7 +110,7 @@ const Home = () => {
         socket.connect()
         socket.on('get-editmsg', data => {
             if (data.update === 1) {
-                getChatData()
+                // getChatData()
                 axios.get(`${BASE_URL}/group&useriddata/${userId}`,).then(async (res) => {
                     if (res.data) {
                         res.data.map(item => axios.get(`${BASE_URL}/chat-data/${item.groupId}`).then((res) => {
@@ -355,6 +355,7 @@ const Home = () => {
                                 edit
                             });
 
+                            socket.emit('add-editmsg', { update: 1 })
 
                             // axios.put(`${BASE_URL}/update-view/${res.data._id}`, { view: updatedView }, {
                             //     headers: { "Content-Type": "application/json" },
