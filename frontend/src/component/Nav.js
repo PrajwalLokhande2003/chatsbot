@@ -62,10 +62,7 @@ const Nav = () => {
        notify.play()
        setBell(JSON.parse(localStorage.getItem('notification')).display)
        toast("Your getting new message")
-    }, 10):'',
-    console.log(data)
-    
-    
+    }, 10):''
     )
     })
     return () => {
@@ -74,6 +71,8 @@ const Nav = () => {
   }
 
   },[])
+  console.log(userId);
+  
 
 
   const LogOut = () => {
@@ -99,7 +98,7 @@ const Nav = () => {
 
     const formData = new FormData()
     formData.append('groupId', groupId)
-    formData.append('userId', userId)
+    formData.append('userId', JSON.parse(auth)._id)
     formData.append('image', image)
     formData.append('groupName', groupName)
     formData.append('email', JSON.parse(auth).email)
@@ -149,8 +148,13 @@ const Nav = () => {
     if(res){
       localStorage.setItem('notification',JSON.stringify({'display':'d-none'}))
     }
+   }).catch((err)=>{
+    if(err){
+      toast.error('Request failed')
+    }
    })
   }
+  
   
 
   return (
@@ -242,7 +246,7 @@ const Nav = () => {
                         <div className=" fs-3 d-flex row w-100"><span className="w-75">{item.date}</span> <span className="w-25 fs-5 d-flex justify-content-end">{item.time}</span></div>
                         <div className=" d-flex justify-content-center mb-3">Hey {userName}, I am {item.userName} Inviting you to join {item.groupName} Group</div>
                       <div className="d-flex justify-content-evenly mb-3">
-                        <button className="btn btn-success fs-4" ref={acceptRef} onClick={async () => { setGroupId(item.groupId); setImage(item.image); setGroupName(item.groupName); getMessage(); groupId !== '' && groupName !== '' ? await inviteHandle() : setGroupId(item.groupId); setImage(item.image); setGroupName(item.groupName); setMessageId(item._id); }} disabled={check}>
+                        <button className="btn btn-success fs-4" ref={acceptRef} onClick={async () => { getMessage(); groupId !== '' && groupName !== '' ? await inviteHandle() : setGroupId(item.groupId); setImage(item.image); setGroupName(item.groupName); setMessageId(item._id); }} disabled={check}>
                           {check ?
                             <div class="spinner-border spinner-border-sm" style={{ height: '2rem', width: '2rem' }} role="status">
                               <span class="visually-hidden">Loading...</span>

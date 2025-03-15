@@ -110,7 +110,7 @@ const Home = () => {
         socket.connect()
         socket.on('get-editmsg', data => {
             if (data.update === 1) {
-                // getChatData()
+                getChatData()
                 axios.get(`${BASE_URL}/group&useriddata/${userId}`,).then(async (res) => {
                     if (res.data) {
                         res.data.map(item => axios.get(`${BASE_URL}/chat-data/${item.groupId}`).then((res) => {
@@ -157,10 +157,10 @@ const Home = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect(() => {
-        getChatData()
+    // useEffect(() => {
+    //     getChatData()
 
-    }, [cData])
+    // }, [cData])
 
 
     useEffect(() => {
