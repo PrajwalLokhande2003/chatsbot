@@ -382,7 +382,8 @@ app.put('/update-user-password/:id/:currpass',async(req,res)=>{
 
 app.delete('/delete-user/:id/:email',async(req,res)=>{
     let result = await User.deleteOne({_id: req.params.id,email:req.params.email})
-    res.send(result)
+    let result1 = await GroupDetail.deleteOne({userId: req.params.id})
+    res.send({result,result1})
 })
 
 server.listen(PORT);

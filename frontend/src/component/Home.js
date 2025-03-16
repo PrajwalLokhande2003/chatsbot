@@ -110,7 +110,7 @@ const Home = () => {
         socket.connect()
         socket.on('get-editmsg', data => {
             if (data.update === 1) {
-                // getChatData()
+                getChatData()
                 axios.get(`${BASE_URL}/group&useriddata/${userId}`,).then(async (res) => {
                     if (res.data) {
                         res.data.map(item => axios.get(`${BASE_URL}/chat-data/${item.groupId}`).then((res) => {
@@ -157,10 +157,10 @@ const Home = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect(() => {
-        getChatData()
+    // useEffect(() => {
+    //     getChatData()
 
-    }, [cData])
+    // }, [cData])
 
 
     useEffect(() => {
@@ -893,7 +893,9 @@ const Home = () => {
 
                                                         <div className=" card-footer">
                                                             <textarea placeholder="Add Caption " className=" fs-6 top-0 px-3" value={message} onChange={(e) => { setMessage(e.target.value) }} />
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send-fill sendIcon" style={{ color: '#8c60ff' }} viewBox="0 0 16 16" onClick={(e) => { sendChat(e); getChatData(); setClipClass('d-none'); setFileName('') }}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send-fill sendIcon" style={{ color: '#8c60ff' }} viewBox="0 0 16 16" onClick={(e) => { sendChat(e); 
+                                                                // getChatData(); 
+                                                                setClipClass('d-none'); setFileName('') }}>
                                                                 <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z" />
                                                             </svg>
                                                         </div>
@@ -961,7 +963,9 @@ const Home = () => {
                                                         (e.target.files.length > 0 ? setFileName(e.target.files[0]) : setFileName(''))
                                                     }} />
                                                     <textarea placeholder="type a massage" className=" pt-3 px-3" value={message} onChange={(e) => { setMessage(e.target.value) }} />
-                                                    {message !== "" ? <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send-fill sendIcon" style={{ color: '#8c60ff' }} viewBox="0 0 16 16" onClick={(e) => { sendChat(e); getChatData(); updateView(); setreplayDisplay('d-none') }}>
+                                                    {message !== "" ? <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send-fill sendIcon" style={{ color: '#8c60ff' }} viewBox="0 0 16 16" onClick={(e) => { sendChat(e); 
+                                                        // getChatData(); 
+                                                        updateView(); setreplayDisplay('d-none') }}>
                                                         <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z" />
                                                     </svg> : <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-send-fill sendIcon" viewBox="0 0 16 16">
                                                         <path d="M15.964.686a.5.5 0 0 0-.65-.65L.767 5.855H.766l-.452.18a.5.5 0 0 0-.082.887l.41.26.001.002 4.995 3.178 3.178 4.995.002.002.26.41a.5.5 0 0 0 .886-.083zm-1.833 1.89L6.637 10.07l-.215-.338a.5.5 0 0 0-.154-.154l-.338-.215 7.494-7.494 1.178-.471z" />
