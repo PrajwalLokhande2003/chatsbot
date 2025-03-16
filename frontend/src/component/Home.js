@@ -627,7 +627,7 @@ const Home = () => {
                                             <div className={"  cursor-pointer d-flex align-items-center mb-3 p-2 " + (item.groupId === groupId ? 'active' : '')} ref={cData} key={item._id} onClick={() => {
                                                 setItem(item);
                                                 getMember();
-                                                getChatData();
+                                                // getChatData();
                                                 updateView()
                                                 setExitId(item._id);
                                                 messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
