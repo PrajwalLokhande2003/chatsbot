@@ -157,10 +157,10 @@ const Home = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect(() => {
-        getChatData()
+    // useEffect(() => {
+    //     getChatData()
 
-    }, [cData])
+    // }, [cData])
 
 
     useEffect(() => {
