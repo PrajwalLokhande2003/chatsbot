@@ -606,10 +606,6 @@ const Home = () => {
     let lastId = ''
     let lastDate = ''
 
-
-// console.log(chatId);
-
-
     return (
         <>
             <div className="container-fluid position-absolute h-100">
@@ -649,9 +645,9 @@ const Home = () => {
                         <div className="card h-100 rounded-4 bg-dark text-light bg-chatDiv">
                             {member.length > 0 ? <>
 
-                                <div className=" card-header">
+                                <div className=" card-header p-0">
                                     {item !== '' ? <div className="">
-                                        <div className="chat-upper row">
+                                        <div className="chat-upper row rounded-3">
                                             <div className=" img col-2 px-1 h-100 cursor-pointer" onMouseLeave={() => { setVisibility('hidden') }}><img alt="..." src={item.image === '' ? "https://www.shutterstock.com/image-vector/default-avatar-profile-icon-transparent-600nw-2463868853.jpg" : item.image} onMouseOver={() => { member.length > 0 ? setVisibility('visible') : setVisibility('hidden') }} />
                                                 <div className="groupMenu" style={{ visibility: visibility }} >
                                                     <div className="invite" onClick={() => { setInviteDisplay('d-block') }} style={{ cursor: 'pointer' }}>invite</div>
@@ -676,7 +672,7 @@ const Home = () => {
 
                                                                 (<>
                                                                     <div className=" d-flex align-items-center">
-                                                                        {member.map(m => m.userName === item.userName ? <><div className="onlineCircle me-1"></div><div>{item.userName}</div></> : '')}
+                                                                        {member.map(m => m.userName === item.userName ? <><div className="onlineCircle"></div><div className="me-1">{item.userName}</div></> : '')}
                                                                     </div>
                                                                 </>)
                                                                 : '')
@@ -812,13 +808,13 @@ const Home = () => {
                                                                                         <div className=" d-flex mb-2 justify-content-start w-100 px-2">
                                                                                             <div className=" d-flex">
                                                                                                 <div className=" pe-2 ellipse overflow-hidden" style={{ width: '13rem' }}>{item.image.name === '' ? item.image.fileName.replace('https://firebasestorage.googleapis.com/v0/b/groupmedia-6d544.appspot.com/o/', '').replace(item.image.fileName.slice(item.image.fileName.lastIndexOf('?'), item.image.fileName.length), '').replace('%20', ' ') : item.image.name}</div>
-                                                                                                <div className="pe-2"><div className=" rounded-circle p-1 text-info"></div></div>
+                                                                                                <div className="pe-2 d-flex align-items-center"><div className=" rounded-circle p-1 bg-white "></div></div>
                                                                                                 <div>{Math.floor((item.image.size / 1024) > 999 ? ((item.image.size / 1024) / 1000) : (item.image.size / 1024))}<div>{Math.floor((item.image.size / 1024)) > 999 ? "MB" : "KB"}</div></div>
                                                                                             </div>
                                                                                         </div>
                                                                                         <div className=" d-flex justify-content-evenly w-100">
                                                                                             <div className="btn btn-secondary fs-4 px-4" onClick={() => { setViewClass('d-flex'); setFileUrl(item.image) }}>open</div>
-                                                                                            <div className="btn btn-secondary fs-4 px-4">save</div>
+                                                                                            <div className="btn btn-secondary fs-4 px-4"><a href={item.image.fileName} download>save</a></div>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>}
