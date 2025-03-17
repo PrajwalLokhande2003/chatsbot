@@ -110,11 +110,12 @@ const Home = () => {
         socket.connect()
         socket.on('get-editmsg', data => {
             if (data.update === 1) {
-                getChatData()
+                // getChatData()
                 axios.get(`${BASE_URL}/group&useriddata/${userId}`,).then(async (res) => {
                     if (res.data) {
                         res.data.map(item => axios.get(`${BASE_URL}/chat-data/${item.groupId}`).then((res) => {
                             if (res.data.length > 0) {
+                                setChatId(res.data)
                                 document.getElementById(res.data[res.data.length - 1].groupId).innerHTML =
                                     `<span class="overflow-hidden w-90 position-absolute ellipse">${res.data.length > 0 ? res.data[res.data.length - 1].image.name !== '' ? (`<img class=" border-0 w-auto h-auto rounded-0 pe-1" src="https://pro.alchemdigital.com/api/extension-image/${res.data[res.data.length - 1].image.ext}" alt="..."/>` + res.data[res.data.length - 1].image.name) : res.data[res.data.length - 1].message : ''}</span>` +
                                     res.data[res.data.length - 1].view.map(m => m.id === userId ? (m.numV === 0 ? '' : `<span class="badge badge-light position-absolute end-0 bg-info ">${m.numV}</span>`) : '').join('')
